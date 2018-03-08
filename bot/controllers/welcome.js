@@ -14,7 +14,7 @@ class WelcomeController extends BaseController {
     this.commands = [
       new Command(
         '!welcome',
-        '!welcome',
+        '!welcome <member>',
         'Welcome Message',
         'Resend the welcome message you recieved when you joined the server.',
         this.welcomeAction.bind(controller),
