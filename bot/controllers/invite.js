@@ -34,14 +34,13 @@ class inviteController extends BaseController {
     const email = message.parsed[1].toLowerCase();
     const emailDomain = email.split('@').pop();
     if (validDomains.includes(emailDomain)) {
-      const invite = message.guild.channels.get('372940806106906627').createInvite().then(invite =>
-        message.author.send(invite.url));
-
-      const inviteLink = message.author.send(invite.url);
+      const invite = message.guild.channels.get('372940806106906627').createInvite()
+        .then(invite => invite.url);
+      // message.author.send(invite.url));
 
       // TODO: Set `time` prop to 600000 (10min)
       const collector = message.channel.createMessageCollector(
-        m => m.content.includes(invite.url));
+        m => m.content.includes(invite));
       collector.on('collect', (m) => {
         const verifyUser = 'Welcome aboard, Crewmate!';
         const userAlredyOnSystem = 'This email has already been verified to a discord user.';
@@ -77,7 +76,7 @@ class inviteController extends BaseController {
         from: process.env.EMAIL_USERNAME,
         to: email,
         subject: 'Armada Verification Code',
-        html: `<table><tr><td><p>Enter the code below into Discord, in the same channel on the Armada Server. Verification will timeout after ${inviteLink} minutes from first entering the !verify command.</p></td></tr></table>`,
+        html: `<table><tr><td><p>Enter the code below into Discord, in the same channel on the Armada Server. Verification will timeout after ${invite} minutes from first entering the !verify command.</p></td></tr></table>`,
       };
       // Call sendMail on sendVerifyCode
       // Pass mailOptions & callback function
@@ -87,7 +86,7 @@ class inviteController extends BaseController {
           message.reply(errorMsg);
           util.log('Email not sent', err, 3);
         } else {
-          util.log('Email details', info, inviteLink);
+          util.log('Email details', info, 3);
         }
       });
 
